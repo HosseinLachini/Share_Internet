@@ -19,9 +19,8 @@ This Bash script configures IP forwarding from a Linux PC to an eLinux board to 
 1. Download the script:
 
 ```bash   
-git clone git@github.com:HosseinLachini/PC2eLinux_Intenet_Sharing.git
-cd PC2eLinux_Intenet_Sharing
-chmod +x internet_sharing.sh
+git clone git@github.com:HosseinLachini/Share_Internet.git
+cd Share_Internet
 ```
 
     
