@@ -2,6 +2,18 @@
 
 set -e
 
+# Root / sudo handling
+SUDO=""
+if [[ "$EUID" -ne 0 ]]; then
+    if command -v sudo >/dev/null 2>&1; then
+        SUDO="sudo"
+    else
+        echo "❌ This script requires root privileges or the 'sudo' command."
+        echo "➡️  Please run as root (e.g., with sudo) and try again."
+        exit 1
+    fi
+fi
+
 echo "🌐 eLinux ↔️ PC Internet Sharing Setup Script"
 echo "-------------------------------------------"
 
@@ -39,7 +51,7 @@ del_old_route() {
     if [[ -n "$iface" ]]; then
         ipaddr=$(ip route | grep default | awk '{print $3}')
         echo "✅ Detected route via $iface and delete it."
-        ip route del default via "$ipaddr" dev "$iface"
+        $SUDO ip route del default via "$ipaddr" dev "$iface"
     else
         echo "ℹ️ No old route find."
     fi
@@ -85,17 +97,17 @@ if [[ "$ROLE" == "PC" ]]; then
 
     echo
     echo "✅ Enabling IP forwarding and configuring NAT..."
-    sudo sysctl -w net.ipv4.ip_forward=1
-    sudo iptables -t nat -A POSTROUTING -o $inet_if -j MASQUERADE
-    sudo iptables -A FORWARD -i $lan_if -o $inet_if -j ACCEPT
-    sudo iptables -A FORWARD -i $inet_if -o $lan_if -m state --state RELATED,ESTABLISHED -j ACCEPT
+    $SUDO sysctl -w net.ipv4.ip_forward=1
+    $SUDO iptables -t nat -A POSTROUTING -o "$inet_if" -j MASQUERADE
+    $SUDO iptables -A FORWARD -i "$lan_if" -o "$inet_if" -j ACCEPT
+    $SUDO iptables -A FORWARD -i "$inet_if" -o "$lan_if" -m state --state RELATED,ESTABLISHED -j ACCEPT
 
     echo "✅ NAT configuration complete. eLinux can now route internet through this machine."
 
 # ----------------- BOARD Role -----------------
 elif [[ "$ROLE" == "BOARD" ]]; then
     echo
-     echo "➡️ Acting as eLinux BOARD (Client)."
+    echo "➡️ Acting as eLinux BOARD (Client)."
 
     del_old_route
 
@@ -124,7 +136,7 @@ elif [[ "$ROLE" == "BOARD" ]]; then
         if [[ $pc_ip =~ $pc_ip_regex ]]; then
             echo "✅ The IP address $pc_ip is in the correct range ($pc_ip_range)."
             echo "🔍 Pinging $pc_ip..."
-            if ping -c 2 $pc_ip >/dev/null; then
+            if ping -c 2 "$pc_ip" >/dev/null; then
                 echo "✅ PC is reachable."
                 break
             else
@@ -138,10 +150,10 @@ elif [[ "$ROLE" == "BOARD" ]]; then
 
     echo
     echo "✅ Adding default route via $pc_ip..."
-    sudo ip route add default via $pc_ip dev $pc_if || echo "⚠️ Route may already exist."
+    $SUDO ip route add default via "$pc_ip" dev "$pc_if" || echo "⚠️ Route may already exist."
 
     echo "✅ Setting DNS to 8.8.8.8..."
-    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
+    echo "nameserver 8.8.8.8" | $SUDO tee /etc/resolv.conf > /dev/null
 
     echo
     echo "🌐 Testing internet connectivity..."
