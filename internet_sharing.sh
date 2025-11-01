@@ -1,4 +1,18 @@
 #!/bin/bash
+#
+# 🌐 eLinux ↔️ PC Internet Sharing Setup Script
+# ---------------------------------------------------------
+# Author: Hossein Lachini
+# GitHub: https://github.com/HosseinLachini
+# LinkedIn: https://www.linkedin.com/in/hossein-lachini/
+# Version: 1.0.0
+# License: GPL-2.0
+#
+# Description:
+#   Share internet from a Linux PC to an embedded Linux board
+#   (via Ethernet, USB-RNDIS, or LAN) for development, SSH, or NFS root setups.
+#   Works automatically with both root and non-root users.
+# ---------------------------------------------------------
 
 set -e
 
