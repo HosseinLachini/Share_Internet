@@ -1,3 +1,7 @@
+[![Latest Release](https://img.shields.io/github/v/release/HosseinLachini/Share_Internet)](https://github.com/HosseinLachini/Share_Internet/releases)
+[![License](https://img.shields.io/badge/license-GPL--2.0-informational)](#license)
+[![Stars](https://img.shields.io/github/stars/HosseinLachini/Share_Internet?style=social)](https://github.com/HosseinLachini/Share_Internet/stargazers)
+
 # 🛠️ eLinux ↔️ PC Internet Sharing Script
 
 This Bash script configures IP forwarding from a Linux PC to an eLinux board to provide internet access to the board.
@@ -70,3 +74,14 @@ If internet doesn't work:
 
 - [internet_sharing.sh](internet_sharing.sh) — the main script
 - [README.md](README.md) — this manual
+
+---
+
+## 👤 Author
+
+**Hossein Lachini**  
+📫 [GitHub](https://github.com/HosseinLachini) • [LinkedIn](https://www.linkedin.com/in/hossein-lachini/)
+
+## 🪪 License
+
+This project is licensed under the **GPL-2.0** License — see the [LICENSE](LICENSE) file for details.
